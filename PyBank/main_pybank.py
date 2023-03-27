@@ -15,48 +15,91 @@ with open(csvpath, newline = "") as pybank:
 
     # print(csvreader)
     csv_header = next(csvreader)
-    print(f"CSV Header: {csv_header}")
+    #print(f"CSV Header: {csv_header}")
 
     totalmonths = 0 
     totalProfitLoss = 0
     AvgProfitLoss = 0
-    counter = 0 
-    minValue = 0 
-    maxValue = 0 
-    MaxValMontth = 0 
-    MinValMonth = 0 
-    months = list()
-    diffMonths = list()
-    total = 0
     valueInt= 0
-    oldMonthValue = 0  
-
-
+    current_mo_PL = 0 
+    previous_mo_PL = 0 
+    profit_change = 0 
+    high_change = 0 
+    low_change = 0 
+    diffMonths = list()
+    net_PL = list()
+   
     for row in csvreader: 
-        totalmonths = totalmonths + 1 #calculate the total number of months included in the dataset
-        totalProfitLoss = totalProfitLoss + int(row[1]) #calculate the net total amount of "Profit/Losses" over the entire period
-        AvgProfitLoss = totalProfitLoss / totalmonths #calculat the average profitloss
-       
-        valueInt = int(row[1])
-        if counter == 0:
-            minValue = valueInt
-            maxValue = valueInt
-            maxMonth = row[0]
-            minMonth = row[0]
+        totalmonths += 1 #calculate the total number of months included in the dataset
+        totalProfitLoss += int(row[1]) #calculate the net total amount of "Profit/Losses" over the entire period
+        #profit_change += totalProfitLoss
+        #AvgProfitLoss = totalProfitLoss / totalmonths #calculate the average profitloss
         
-        # else: 
-		#     if counter > 0:
-        #         diffMonths.append(valueInt - oldMonthValue)
-        #         oldMonthValue = valueInt
-        # #     total += valueInt
-        # #     counter  += 1
-        # #     months.append(row[0])
+        # if totalProfitLoss > 0:
+        #     #profit_change += totalProfitLoss
+        #     profit_change = totalProfitLoss
+        #     profit_change = current_mo_PL
+        #     profit_change = previous_mo_PL
+        #     profit_change = previous_mo_PL + current_mo_PL
+        #     profit_change = current_mo_PL
+        #     diffMonths.append(row[0])
+        #     net_PL.append(profit_change)
 
-print(totalProfitLoss)
-print(totalmonths)
-print(AvgProfitLoss)
-print(valueInt)
-print(counter)
+        # else:
+        #     profit_change = totalProfitLoss
+        #     profit_change = current_mo_PL
+        #     profit_change = previous_mo_PL
+        #     profit_change = previous_mo_PL - current_mo_PL
+        #     profit_change = current_mo_PL
+        #     diffMonths.append(row[0])
+        #     net_PL.append(profit_change)
+
+
+        # if totalmonths == 1: 
+        #     previous_mo_PL = current_mo_PL
+        #     continue
+        # else: 
+        #     profit_change = current_mo_PL - previous_mo_PL
+        #     diffMonths.append(row[0])
+        #     net_PL.append(profit_change)
+        #     previous_mo_PL = current_mo_PL
+
+            # #valueInt = int(row[1])
+            # if valueInt < 0: 
+            #     valueInt =  valueInt + int(row[1])
+            #     diffMonths.append(valueInt)
+            # else: 
+            #     valueInt = valueInt - int(row[1])
+            #     diffMonths.append(valueInt)
+
+        if totalProfitLoss > 0:
+            totalProfitLoss -= int(row[1])
+            totalProfitLoss = previous_mo_PL
+            diffMonths.append(row[0])
+            net_PL.append(totalProfitLoss)
+
+        
+           
+net_PL.pop(0)
+print(net_PL)
+print(diffMonths)
+def Average (net_PL): 
+    return sum(net_PL)/len(net_PL)
+average = Average(net_PL)
+print("Average of the list = ", round(average, 2))
+
+high_change = max(net_PL)
+print(high_change)
+low_change = min (net_PL)
+print(low_change)
+
+
+print("Total Months: ", totalmonths)
+print("Total Profit Loss: ", totalProfitLoss)
+#print("Average Profit Loss: ", AvgProfitLoss)
+#print("ValueInt: ", valueInt)
+#print("Average Change: ", AvgIncrease)
+
 
 
 
